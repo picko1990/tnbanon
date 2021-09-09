@@ -1,0 +1,28 @@
+{% extends "main/base.html" %}
+
+
+{% block content %}
+
+<h2>Setup</h2>
+{% if message %}
+<P>{{message}}</P>
+{% endif %}
+<form action="{% url 'setup' %}" method="POST">
+    {% csrf_token %}
+    <label for="hybrid_a">hybrid a:</label><br>
+    <input type="text" id="hybrid_a" name="hybrid_a" size="64" required>
+    <br><br>
+
+    <label for="hybrid_b">hybrid b:</label><br>
+    <input type="text" id="hybrid_b" name="hybrid_b" size="64" required>
+    <br><br>
+
+    <label for="compensation_sender">compensation sender:</label><br>
+    <input type="text" id="compensation_sender" name="compensation_sender" size="64" required>
+    <br><br>
+
+    <input type="submit" value="Confirm">
+</form>
+
+
+{% endblock %}

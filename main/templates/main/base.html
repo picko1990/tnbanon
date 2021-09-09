@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <title>TNBAnon</title>
+    <style>
+        #container {
+            width: 800px;
+            margin: 100px auto auto auto;
+            background-color: #e6e6e6;
+            padding: 60px;
+            box-sizing: border-box;
+        }
+
+        ul {
+            list-style-type: none;
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+        }
+
+        li {
+            float: left;
+        }
+
+        li a {
+            display: block;
+            padding: 10px 20px 10px 0px;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="container">
+        <ul>
+            <li><a href="{% url 'enter_amount' %}">New Transaction</a></li>
+            <li><a href="{% url 'status' %}">Check Status</a></li>
+        </ul>
+        {% block content %}{% endblock %}
+    </div>
+</body>
+
+</html>

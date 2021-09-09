@@ -1,0 +1,75 @@
+{% extends "main/base.html" %}
+
+
+{% block content %}
+
+<h2>Check Status</h2>
+<form action="{% url 'status' %}" method="POST">
+    {% csrf_token %}
+    <input type="text" name="key" value="{{operation.key}}" size="32" placeholder="key" required>
+    <input type="submit" value="Check">
+</form>
+
+
+{% if message %}
+<br>
+<hr>
+<p>{{message}}</p>
+{% endif %}
+
+
+{% if operation %}
+<br>
+<hr>
+
+
+{% if operation.status == "awaiting_receipt" %}
+<h3>Awaiting Receipt</h3>
+<p>Please send <b>{{operation.total_amount}} coins</b> from:</p>
+<input type="text" value="{{operation.sender}}" size="64" readonly>
+<p>To:</p>
+<input type="text" value="{{operation.receiving_wallet_account_number}}" size="64" readonly><br><br>
+
+
+{% elif operation.status == "received" %}
+<h3>Received</h3>
+<p>A compensation wallet will be generated for you soon</p>
+
+
+{% elif operation.status == "compensated" %}
+<h3>Coins on the way</h3>
+
+{% if operation.minutes_left > 0 %}
+<p>The receiver will get the coins in <span id="delay"></span></p>
+<script>
+    function calculate_delay() {
+        minutes_left = {{ operation.minutes_left }};
+        hours = Math.floor(minutes_left / 60);
+        minutes = minutes_left % 60;
+        document.getElementById("delay").innerHTML = "<b>" + hours + " hours</b> and <b>" + minutes + " minutes</b>";
+    }
+    calculate_delay();
+</script>
+{% else %}
+<p>The receiver will get the coins at any moment soon</p>
+{% endif %}
+
+<br>
+<p>This is the signing key for your compensation wallet:</p>
+<input type="text" value="{{operation.decrypted_compensation_key}}" size="64" readonly>
+
+
+{% elif operation.status == "sent" %}
+<h3>Sent</h3>
+<p>Coins anonymously arrived to the receiver's account</p>
+<br>
+<p>This is the signing key for your compensation wallet:</p>
+<input type="text" value="{{operation.decrypted_compensation_key}}" size="64" readonly>
+
+
+{% endif %}
+
+
+{% endif %}
+
+{% endblock %}

@@ -1,0 +1,19 @@
+{% extends "main/base.html" %}
+
+
+{% block content %}
+
+<p>This is your secret key, keep it safe:</p>
+<input type="text" value="{{operation.key}}" size="36" readonly><br><br>
+<p>Please send <b>{{operation.total_amount}} coins</b> from:</p>
+<input type="text" value="{{operation.sender}}" size="64" readonly>
+<p>To:</p>
+<input type="text" value="{{operation.receiving_wallet_account_number}}" size="64" readonly><br><br>
+<p>Then click on <b>check status</b></p>
+<form action="{% url 'status' %}" method="POST">
+    {% csrf_token %}
+    <input type="hidden" name="key" value="{{operation.key}}">
+    <input type="submit" value="Check status">
+</form>
+
+{% endblock %}

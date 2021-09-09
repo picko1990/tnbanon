@@ -1,0 +1,67 @@
+{% extends "main/base.html" %}
+
+
+{% block content %}
+
+<h2>New Transaction</h2>
+{% if error %}
+<p>{{error}}</p>
+{% endif %}
+
+<form action="{% url 'enter_amount' %}" method="POST">
+    {% csrf_token %}
+    <input type="number" min="100" name="amount" {% if amount %} value={{amount}} {% endif %} placeholder="amount" required>
+    <input type="submit" value="check">
+</form>
+
+{% if amount %}
+<br><hr><br>
+{% if operation_possible %}
+<form action="{% url 'created' %}" method="POST">
+    {% csrf_token %}
+    <label for="sender">sender:</label><br>
+    <input type="text" id="sender" name="sender" size="64" required>
+    <br><br>
+
+    <label for="receiver">receiver:</label><br>
+    <input type="text" id="receiver" name="receiver" size="64" required>
+    <br><br>
+
+    <label for="total_amount">total amount: <b id="total_amount_label"></b></label><br>
+    <input type="range" id="total_amount" name="total_amount" step="100" min={{minimum_amount}} max={{maximum_amount}}
+        value={{suggested_amount}} oninput="update_amount()">
+    <br><br>
+
+    <label for="delay">delay: <b id="delay_label"></b></label><br>
+    <input type="range" id="delay" name="delay" min={{minimum_delay}} max={{maximum_delay}} value={{suggested_delay}}
+        oninput="update_delay()">
+    <br><br>
+
+    <input type="hidden" name="key" value={{key}}>
+    <input type="hidden" name="amount" value={{amount}}>
+    <input type="submit" value="confirm">
+</form>
+{% else %}
+operation not possible
+{% endif %}
+{% endif %}
+
+<script>
+    function update_amount() {
+        document.getElementById("total_amount_label").innerHTML = document.getElementById("total_amount").value + " TNBC";
+    }
+    function update_delay() {
+        delay = document.getElementById("delay").value;
+        hours = Math.floor(delay / 60);
+        minutes = delay % 60;
+        document.getElementById("delay_label").innerHTML = hours + " hours and " + minutes + " minutes";
+    }
+
+    document.addEventListener("DOMContentLoaded", function () {
+        update_amount();
+        update_delay();
+    });
+</script>
+
+
+{% endblock %}
