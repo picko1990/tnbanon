@@ -1,4 +1,5 @@
 # TNBAnon
+TNBAnon offers you the ability to anonymously send your coins on [TNBC](http://thenewboston.com) network  
 Please follow these steps for testing:
 * Clone and install requirements `pip install -r requirements.txt`
 * Migrate `python manage.py migrate`
